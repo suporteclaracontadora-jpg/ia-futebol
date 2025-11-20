@@ -1,4 +1,4 @@
 requests
 pandas
 joblib
-scikit-learn
+selenium
