@@ -27,8 +27,11 @@ jobs:
       with:
         python-version: '3.10'
 
+    # CORREÇÃO: Força a atualização do pip para garantir que encontre o joblib
     - name: Instalar Dependências (requirements.txt)
-      run: pip install -r requirements.txt
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
     
     - name: 🧠 Rodar o ia.py (Coletar jogos futuros e prever)
       run: python ia.py
