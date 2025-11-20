@@ -22,19 +22,17 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
-    # CORREÇÃO CRUCIAL 1: Instala ferramentas de desenvolvimento C/C++ (para o joblib)
-    - name: Instalar Ferramentas de Compilação (build-essential)
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential
-
-    # CORREÇÃO 2: Usa Python 3.11 para maior estabilidade
+    # CORREÇÃO CRUCIAL 1: Instala ferramentas de compilação (gcc/build-essential) de forma segura
+    - name: Instalar Ferramentas de Compilação (gcc/build-essential)
+      uses: maxim-top/setup-build-tools@v1 # Novo passo confiável
+      
+    # Usa Python 3.11 para maior estabilidade
     - name: Configurar Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    # CORREÇÃO 3: Instala as bibliotecas diretamente (requests, pandas, joblib)
+    # Instala as bibliotecas diretamente (requests, pandas, joblib)
     - name: Instalar Dependências (Direto)
       run: |
         pip install --upgrade pip
@@ -62,11 +60,9 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
-    - name: Instalar Ferramentas de Compilação (build-essential)
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential
-
+    - name: Instalar Ferramentas de Compilação (gcc/build-essential)
+      uses: maxim-top/setup-build-tools@v1
+      
     - name: Configurar Python
       uses: actions/setup-python@v5
       with:
