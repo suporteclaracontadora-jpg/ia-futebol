@@ -22,13 +22,19 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
-    # CORREÇÃO: Mudar versão do Python para 3.11
+    # CORREÇÃO CRUCIAL 1: Instala ferramentas de desenvolvimento C/C++ (para o joblib)
+    - name: Instalar Ferramentas de Compilação (build-essential)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+
+    # CORREÇÃO 2: Usa Python 3.11 para maior estabilidade
     - name: Configurar Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
-    # Instala as 3 bibliotecas diretamente (corrigindo erro de dependência)
+    # CORREÇÃO 3: Instala as bibliotecas diretamente (requests, pandas, joblib)
     - name: Instalar Dependências (Direto)
       run: |
         pip install --upgrade pip
@@ -46,7 +52,7 @@ jobs:
         gist_id: '' 
         update: true
 
-  # JOB 2: Atualização Mensal (Coleta Resultados Antigos para Manutenção do Modelo)
+  # JOB 2: Atualização Mensal (Mantido para o futuro)
   atualizacao_mensal:
     # Roda apenas na cron mensal (dia 1)
     if: github.event.schedule == '0 4 1 * *'
@@ -56,6 +62,11 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
+    - name: Instalar Ferramentas de Compilação (build-essential)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential
+
     - name: Configurar Python
       uses: actions/setup-python@v5
       with:
@@ -64,7 +75,6 @@ jobs:
     - name: Instalar Dependências
       run: pip install requests pandas joblib
     
-    # ⚠️ AÇÃO FUTURA: Coleta de jogos passados e re-treino
     - name: 🔄 Rodar Coleta de Resultados Antigos (Opcional)
       run: |
         echo "Lembrete: Para manter a IA aprendendo, crie um script (ex: retreino.py) que colete os resultados dos jogos que já passaram e re-treine seu modelo .pkl."
