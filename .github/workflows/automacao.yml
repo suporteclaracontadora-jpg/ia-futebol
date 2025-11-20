@@ -1,21 +1,15 @@
 name: Automação da IA de Futebol
 
 # AGENDAMENTO: Roda a previsão todos os dias às 04:00 UTC (01:00 AM BRT)
-# e roda a atualização de dados no dia 1 de cada mês (01:00 AM BRT)
 on:
   schedule:
-    # Previsão Diária: 01:00 AM Horário de Brasília (BRT)
     - cron: '0 4 * * *'
-    # Atualização Mensal: Dia 1 de cada mês, 01:00 AM BRT
-    - cron: '0 4 1 * *'
   # Permite rodar manualmente clicando no botão "Run workflow" no GitHub
   workflow_dispatch:
 
 jobs:
   # JOB 1: Previsão Diária (Coleta jogos agendados e faz a previsão)
   previsao_diaria:
-    # Roda apenas na cron diária ou manualmente
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 4 * * *'
     runs-on: ubuntu-latest
     
     steps:
@@ -23,12 +17,12 @@ jobs:
       uses: actions/checkout@v4
 
     # Instala ferramentas de compilação (gcc/build-essential) de forma segura
-    - name: Instalar Ferramentas de Compilação (gcc/build-essential)
+    - name: Instalar Ferramentas de Compilação
       uses: maxim-top/setup-build-tools@v1
       
-    # CORREÇÃO FINAL: Bloco de Python simplificado
+    # Configurar Python (Versão 3.11, com sintaxe revisada)
     - name: Configurar Python 3.11
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
@@ -49,29 +43,3 @@ jobs:
         token: ${{ secrets.GIST_TOKEN }}
         gist_id: '' 
         update: true
-
-  # JOB 2: Atualização Mensal (Mantido para o futuro)
-  atualizacao_mensal:
-    # Roda apenas na cron mensal (dia 1)
-    if: github.event.schedule == '0 4 1 * *'
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout do Código
-      uses: actions/checkout@v4
-
-    - name: Instalar Ferramentas de Compilação (gcc/build-essential)
-      uses: maxim-top/setup-build-tools@v1
-      
-    - name: Configurar Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.11'
-
-    - name: Instalar Dependências
-      run: pip install requests pandas joblib
-    
-    - name: 🔄 Rodar Coleta de Resultados Antigos (Opcional)
-      run: |
-        echo "Lembrete: Para manter a IA aprendendo, crie um script (ex: retreino.py) que colete os resultados dos jogos que já passaram e re-treine seu modelo .pkl."
-        echo "Comando a ser adicionado aqui: python retreino.py"
