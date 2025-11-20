@@ -22,11 +22,11 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
-    # CORREÇÃO CRUCIAL 1: Instala ferramentas de compilação (gcc/build-essential) de forma segura
+    # Instala ferramentas de compilação (gcc/build-essential) de forma segura
     - name: Instalar Ferramentas de Compilação (gcc/build-essential)
-      uses: maxim-top/setup-build-tools@v1 # Novo passo confiável
+      uses: maxim-top/setup-build-tools@v1
       
-    # Usa Python 3.11 para maior estabilidade
+    # Configurar Python (Indentação corrigida)
     - name: Configurar Python
       uses: actions/setup-python@v5
       with:
