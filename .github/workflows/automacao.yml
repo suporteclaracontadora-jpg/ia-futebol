@@ -1,0 +1,67 @@
+name: Automação da IA de Futebol
+
+# AGENDAMENTO: Roda a previsão todos os dias às 04:00 UTC (01:00 AM BRT)
+# e roda a atualização de dados no dia 1 de cada mês (01:00 AM BRT)
+on:
+  schedule:
+    # Previsão Diária: 01:00 AM Horário de Brasília (BRT)
+    - cron: '0 4 * * *'
+    # Atualização Mensal: Dia 1 de cada mês, 01:00 AM BRT
+    - cron: '0 4 1 * *'
+  # Permite rodar manualmente clicando no botão "Run workflow" no GitHub
+  workflow_dispatch:
+
+jobs:
+  # JOB 1: Previsão Diária (Coleta jogos agendados e faz a previsão)
+  previsao_diaria:
+    # Roda apenas na cron diária ou manualmente
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 4 * * *'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout do Código
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Instalar Dependências (requirements.txt)
+      run: pip install -r requirements.txt
+    
+    - name: 🧠 Rodar o ia.py (Coletar jogos futuros e prever)
+      run: python ia.py
+
+    - name: 💾 Salvar Previsões no GitHub Gist
+      # ESTE PASSO CRIA UM ARQUIVO DE TEXTO NA NUVEM (GIST) COM AS SUAS PREVISÕES!
+      uses: softprops/action-gh-gist@v1
+      with:
+        files: previsoes_do_dia.csv
+        token: ${{ secrets.GIST_TOKEN }}
+        gist_id: '' 
+        update: true
+
+  # JOB 2: Atualização Mensal (Coleta Resultados Antigos para Manutenção do Modelo)
+  atualizacao_mensal:
+    # Roda apenas na cron mensal (dia 1)
+    if: github.event.schedule == '0 4 1 * *'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout do Código
+      uses: actions/checkout@v4
+
+    - name: Configurar Python
+      uses: actions:setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Instalar Dependências
+      run: pip install -r requirements.txt
+    
+    # ⚠️ AÇÃO FUTURA: Coleta de jogos passados e re-treino
+    - name: 🔄 Rodar Coleta de Resultados Antigos (Opcional)
+      run: |
+        echo "Lembrete: Para manter a IA aprendendo, crie um script (ex: retreino.py) que colete os resultados dos jogos que já passaram e re-treine seu modelo .pkl."
+        echo "Comando a ser adicionado aqui: python retreino.py"
