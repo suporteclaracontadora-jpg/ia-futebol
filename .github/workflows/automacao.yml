@@ -22,12 +22,13 @@ jobs:
     - name: Checkout do Código
       uses: actions/checkout@v4
 
+    # CORREÇÃO: Mudar versão do Python para 3.11
     - name: Configurar Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
 
-    # CORREÇÃO DEFINITIVA: Instala as 3 bibliotecas diretamente sem usar requirements.txt
+    # Instala as 3 bibliotecas diretamente (corrigindo erro de dependência)
     - name: Instalar Dependências (Direto)
       run: |
         pip install --upgrade pip
@@ -58,7 +59,7 @@ jobs:
     - name: Configurar Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
 
     - name: Instalar Dependências
       run: pip install requests pandas joblib
