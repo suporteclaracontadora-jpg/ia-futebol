@@ -27,11 +27,11 @@ jobs:
       with:
         python-version: '3.10'
 
-    # CORREÇÃO: Força a atualização do pip para garantir que encontre o joblib
-    - name: Instalar Dependências (requirements.txt)
+    # CORREÇÃO DEFINITIVA: Instala as 3 bibliotecas diretamente sem usar requirements.txt
+    - name: Instalar Dependências (Direto)
       run: |
         pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install requests pandas joblib
     
     - name: 🧠 Rodar o ia.py (Coletar jogos futuros e prever)
       run: python ia.py
@@ -61,7 +61,7 @@ jobs:
         python-version: '3.10'
 
     - name: Instalar Dependências
-      run: pip install -r requirements.txt
+      run: pip install requests pandas joblib
     
     # ⚠️ AÇÃO FUTURA: Coleta de jogos passados e re-treino
     - name: 🔄 Rodar Coleta de Resultados Antigos (Opcional)
